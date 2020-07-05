@@ -5,8 +5,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import web.model.Role;
 import web.model.User;
 import web.service.UserService;
+
+import java.util.*;
 
 
 @Controller
@@ -27,16 +30,24 @@ public class UserController {
 	}
 
 	@GetMapping("/admin/addUser")
-	public String formAddUser() {
+	public String formAddUser(ModelMap model) {
+		model.addAttribute("listOfRoles", userService.listRoles());
 		return "user_form";
 	}
 
 	@PostMapping("/admin/save")
-	public String addUser(@ModelAttribute User user) {
-		if(user != null && user.getId() != null){
-			userService.updateUser(user);
+	public String addUser(@RequestParam(value = "id") String id, @RequestParam(value = "name") String name,
+						  @RequestParam(value = "password") String password, ModelMap model, @RequestParam("roles")String[] roles) {
+		Set<Role> tempRole = new HashSet<>();
+		for (int i = 0; i < roles.length; i++) {
+			tempRole.add(userService.getRoleByName(roles[i]));
+		}
+		User user;
+		if (id.isEmpty()) {
+			userService.addUser(new User(name, password, tempRole));
 		} else {
-			userService.addUser(user);
+			user = new User(Long.valueOf(id), name, password, tempRole);
+			userService.updateUser(user);
 		}
 		return "redirect:/admin";
 	}
@@ -44,6 +55,7 @@ public class UserController {
 	@GetMapping("/admin/updateUser/{id}")
 	public String formUpdateUser(@PathVariable("id") long id, ModelMap model) {
 		model.addAttribute("user", userService.getUserById(id));
+		model.addAttribute("listOfRoles", userService.listRoles());
 		return "user_form";
 	}
 

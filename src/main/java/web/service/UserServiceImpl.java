@@ -3,6 +3,7 @@ package web.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import web.dao.RoleDao;
 import web.dao.UserDao;
 import web.model.Role;
 import web.model.User;
@@ -14,10 +15,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private UserDao userDao;
+    private RoleDao roleDao;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, RoleDao roleDao) {
         this.userDao = userDao;
+        this.roleDao = roleDao;
     }
 
     @Override
@@ -34,7 +37,7 @@ public class UserServiceImpl implements UserService {
         if (userFromDB != null) {
             return;
         }
-        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        //user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
         userDao.addUser(user);
     }
 
@@ -53,6 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateUser(User user) {
+        //user.setRoles(Collections.singleton(new Role(2L, "ROLE_ADMIN")));
         userDao.updateUser(user);
     }
 
@@ -60,5 +64,17 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void deleteUser(long id) {
         userDao.deleteUser(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Role> listRoles() {
+        return roleDao.getAllRoles();
+    }
+
+    @Override
+    @Transactional
+    public Role getRoleByName(String name) {
+        return roleDao.getUserByName(name);
     }
 }

@@ -15,14 +15,16 @@
 <body>
 <h1>User-form</h1>
 
-<form:form method="post" action="/admin/save" modelAttribute="user">
+<form action="/admin/save" method="post">
     <table cellspacing="0" border="1">
         <tr>
             <td>ID:</td>
             <td>
                 <c:if test="${user != null}">
                     <input type="text" name="id" value="<c:out value='${user.id}' />"/>
-                    <form:hidden path="id"/>
+                </c:if>
+                <c:if test="${user == null}">
+                    <input type="hidden" name="id" value='${user.id}'>
                 </c:if>
             </td>
         </tr>
@@ -45,11 +47,18 @@
                     <input type="text" name="password">
                 </c:if></td>
         </tr>
+        <tr>
+            <td>User Role:</td>
+            <td>
+                <c:forEach var="role" items="${listOfRoles}">
+                    <label><input type="checkbox" value="${role.role}" name="roles">${role.role}</label>
+                </c:forEach>
+            </td>
+        </tr>
     </table>
-
     <br>
     <input type="submit" value="Add User"/>
-</form:form>
+</form>
 
 </body>
 </html>

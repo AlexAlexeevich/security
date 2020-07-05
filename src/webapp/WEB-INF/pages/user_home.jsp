@@ -29,13 +29,14 @@
         <td>Пароль</td>
         <td>${user.password}</td>
     </tr>
+    <tr>
+        <td>Роль</td>
+        <td><c:forEach items="${user.roles}" var="role">${role.role}; </c:forEach></td>
+    </tr>
+
 </table>
 <br>
 <a href="/logout">Logout</a>
-
-<%--<form th:action="@{/logout}" method="post">--%>
-<%--    <input type="submit" value="Sign Out"/>--%>
-<%--</form>--%>
 
 </body>
 </html>

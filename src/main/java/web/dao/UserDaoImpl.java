@@ -3,6 +3,7 @@ package web.dao;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import web.model.Role;
 import web.model.User;
 
 import javax.persistence.Query;

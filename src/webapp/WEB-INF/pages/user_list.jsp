@@ -21,6 +21,7 @@
         <th><h3>Id</h3></th>
         <th><h3>Name</h3></th>
         <th><h3>Password</h3></th>
+        <th><h3>Role</h3></th>
         <th colspan="2"><h3>Action with user</h3></th>
     </tr>
     <c:forEach items="${list}" var="user">
@@ -28,6 +29,7 @@
             <td>${user.id}</td>
             <td>${user.name}</td>
             <td>${user.password}</td>
+            <td><c:forEach items="${user.roles}" var="role">${role.role}; </c:forEach></td>
             <td>
                 <a href="<c:url value='/admin/deleteUser/${user.id}'/>">Delete</a>
             </td>
